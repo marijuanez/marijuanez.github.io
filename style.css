@@ -248,8 +248,8 @@ ul.slides li img
 
 .page-desc
 {
-    width: 925px;
-    float: right;
+    width: 1440px;
+    float: none;
     font-size: 24px;
     line-height: 40px;
 }
@@ -559,8 +559,14 @@ ul.archive-list li:first-child
 ul.archive-list li span
 {
     font-weight: 700;
-    color: #fd3137;
+    color: #363535;
 }
+ul.archive-list li b
+{
+    color: #a19d9d;
+
+}
+
 
 /* END ABOUT PAGE */
 
@@ -657,7 +663,7 @@ ul.archive-list li span
     right: 30px;
     z-index: 1;
     font-size: 20px;
-    background-color: white;
+    background-color: rgb(161, 159, 159);
     text-align: center;   
     display: none;    
 }
