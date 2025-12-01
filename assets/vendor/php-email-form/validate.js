@@ -147,7 +147,9 @@
       // fallback: some backends return plain text 'OK'
       if (!success) {
         try {
-          if (typeof msg === 'string' && msg.trim() == 'OK') success = true;
+          if (typeof msg === 'string') {
+            if (msg.trim() == 'OK') success = true;
+          }
         } catch(e) {}
       }
 
