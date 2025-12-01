@@ -129,6 +129,7 @@
       url: action,
       data: data,
       dataType: "json",
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
       timeout: 40000
     }).done( function(msg){
       var success = false;
