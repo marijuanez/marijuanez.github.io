@@ -22,7 +22,7 @@ if (process.env.SENDGRID_API_KEY) {
   }
 }
 
-app.post('/submitContact', async (req, res) => {
+app.post('/', async (req, res) => {
   try {
     const { name, email, subject, message } = (req.body || {});
     // Basic server-side validation
