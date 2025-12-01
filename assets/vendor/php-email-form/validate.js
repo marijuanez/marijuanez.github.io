@@ -128,6 +128,7 @@
       type: "POST",
       url: action,
       data: data,
+      dataType: "json",
       timeout: 40000
     }).done( function(msg){
       var success = false;

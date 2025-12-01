@@ -85,13 +85,6 @@ try {
 // En producción, reemplazar con llamada a Cloud Function o servicio de email
 http_response_code(200);
 echo json_encode([
-    "success" => true,
-    "message" => "Mensaje recibido. Nos pondremos en contacto pronto.",
-    "debug" => [
-        "name" => $name,
-        "email" => $email,
-        "db_status" => $success ? "saved" : ($db_error ?: "unavailable"),
-        "db_error" => $db_error ?: null
-    ]
+    "success" => true
 ]);
 ?>
