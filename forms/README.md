@@ -3,18 +3,23 @@
 ## ✅ Instalación Rápida
 
 ### Paso 1: Crear la base de datos
+
 Accede a esta URL en tu navegador:
+
 ```
 http://localhost:8888/Portfolio/forms/db_init.php
 ```
+
 Verás un mensaje de confirmación cuando la BD se cree exitosamente.
 
 Alternativa manual (phpMyAdmin):
+
 1. Abre http://localhost:8888/phpMyAdmin
 2. Copia el contenido de `forms/setup_database.sql`
 3. Pega en la pestaña "SQL" y ejecuta
 
 ### Paso 2: ¡Listo!
+
 El formulario de contacto ya está funcionando. Los datos se guardarán en la BD automáticamente.
 
 ---
@@ -22,11 +27,13 @@ El formulario de contacto ya está funcionando. Los datos se guardarán en la BD
 ## 📧 Ver Mensajes Recibidos
 
 **Acceso a panel de administración:**
+
 ```
 http://localhost:8888/Portfolio/forms/view_messages.php
 ```
 
 Desde aquí puedes:
+
 - Ver todos los mensajes recibidos
 - Marcar como leído/no leído
 - Ver detalle completo de cada mensaje
@@ -36,19 +43,20 @@ Desde aquí puedes:
 
 ## 🛠️ Archivos Incluidos
 
-| Archivo | Descripción |
-|---------|-----------|
-| `contact.php` | Procesa el formulario, valida datos y guarda en BD |
-| `db_init.php` | Script para crear la BD automáticamente |
-| `setup_database.sql` | Script SQL para crear BD manualmente |
-| `view_messages.php` | Panel para ver todos los mensajes |
-| `view_message.php` | Detalle de cada mensaje |
+| Archivo              | Descripción                                        |
+| -------------------- | -------------------------------------------------- |
+| `contact.php`        | Procesa el formulario, valida datos y guarda en BD |
+| `db_init.php`        | Script para crear la BD automáticamente            |
+| `setup_database.sql` | Script SQL para crear BD manualmente               |
+| `view_messages.php`  | Panel para ver todos los mensajes                  |
+| `view_message.php`   | Detalle de cada mensaje                            |
 
 ---
 
 ## 📋 Campos del Formulario
 
 El formulario recibe:
+
 - **name** (texto, min 4 caracteres) — Nombre del remitente
 - **email** (email válido) — Email de contacto
 - **subject** (texto, min 4 caracteres) — Asunto del mensaje
@@ -68,6 +76,7 @@ El formulario recibe:
 ## 💾 Base de Datos
 
 ### Tabla: `messages`
+
 ```sql
 - id (INT, PK, Auto-increment)
 - name (VARCHAR 255)
@@ -91,11 +100,13 @@ Actualmente, `contact.php` envía un email de confirmación al cliente usando `m
 
 1. **Usar SMTP (recomendado):**
    Edita `contact.php` y usa una librería como PHPMailer:
+
    ```php
    composer require phpmailer/phpmailer
    ```
 
 2. **Configurar SMTP en MAMP:**
+
    - Edita `/Applications/MAMP/conf/apache/php.ini`
    - Configura `[mail function]` con tus credenciales SMTP
 
@@ -113,10 +124,12 @@ Los archivos PHP (`.php`) **NO se ejecutarán en GitHub Pages** (es estático).
 **Opciones para producción:**
 
 1. **Backend separado:**
+
    - Hostear `forms/contact.php` en un servidor PHP (Heroku, AWS, DigitalOcean, etc.)
    - Cambiar la URL `action` del formulario a ese servidor
 
 2. **Cloud Function (Firebase):**
+
    - Reemplazar `contact.php` con una Cloud Function en Node.js
    - Llamarla desde AJAX en el formulario
 
@@ -128,23 +141,28 @@ Los archivos PHP (`.php`) **NO se ejecutarán en GitHub Pages** (es estático).
 ## 🐛 Solucionar Problemas
 
 ### Error: "Connection failed"
+
 - Verifica que MAMP está corriendo (MySQL activo)
 - Verifica credenciales en `contact.php` (usuario/contraseña)
 
 ### Error: "Unknown database"
+
 - Ejecuta `db_init.php` para crear la BD
 
 ### Los emails no se envían
+
 - La función `mail()` requiere SMTP configurado
 - Usa `view_messages.php` para ver los mensajes (se guardan igual)
 
 ### El formulario no responde
+
 - Abre la consola del navegador (F12) para ver errores
 - Verifica que `validate.js` está cargado
 
 ---
 
 ## 📞 Contacto
+
 Para preguntas o issues, revisa el código en `forms/contact.php`.
 
 ---
