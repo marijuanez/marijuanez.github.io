@@ -374,6 +374,29 @@ body {
   transition: 0.3s;
 }
 
+/* Estructura semántica: listas horizontales sin viñetas */
+#wrapper .social-links,
+#footer .social-links {
+  list-style: none;
+  padding: 0;
+  margin-left: 0;
+}
+
+#wrapper .social-links li,
+#footer .social-links li {
+  display: inline-block;
+}
+
+/* Asegurar que los SVG de iconos (p.ej. X.com) hereden color/tamaño */
+#wrapper .social-links a svg,
+#footer .social-links a svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 #wrapper .social-links a:hover {
   color: #fff;
 }
