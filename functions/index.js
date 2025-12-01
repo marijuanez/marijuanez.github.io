@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
   res.json({ status: 'ok', service: 'submitContact' });
 });
 
-// Main contact form handler
-app.post('/', async (req, res) => {
+// Unified contact handler for '/' and '/api/contact' (rewrite scenarios)
+async function contactHandler(req, res) {
   try {
     const { name, email, subject, message } = (req.body || {});
     // Basic server-side validation
@@ -66,13 +66,13 @@ app.post('/', async (req, res) => {
     console.error('submitContact error:', err);
     return res.status(500).json({ error: 'Error al procesar el formulario: ' + (err?.message || 'unknown error') });
   }
-});
+}
 
-// Fallback: handle any other POST requests
-app.post('/*', async (req, res) => {
-  // redirect to root POST handler
-  res.status(405).json({ error: 'Endpoint not found. Use POST /' });
-});
+// Accept both root and explicit path (in case rewrites preserve path)
+app.post('/', contactHandler);
+app.post('/api/contact', contactHandler);
+// Generic catch-all: treat as contact to be lenient, or return 404 if desired
+app.post('*', contactHandler);
 
 // Optional SendGrid (moved after routes)
 let sendgrid;
