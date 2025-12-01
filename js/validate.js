@@ -128,9 +128,33 @@
       type: "POST",
       url: action,
       data: data,
+      dataType: "json",
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
       timeout: 40000
     }).done( function(msg){
-      if (msg.trim() == 'OK') {
+      var success = false;
+      // msg can be string or JSON object depending on endpoint
+      try {
+        var parsed = (typeof msg === 'string') ? JSON.parse(msg) : msg;
+        if (parsed) {
+          if (parsed.success === true || parsed.ok === true || parsed.status === 'success') {
+            success = true;
+          }
+        }
+      } catch(e) {
+        // not JSON, ignore
+      }
+
+      // fallback: some backends return plain text 'OK'
+      if (!success) {
+        try {
+          if (typeof msg === 'string') {
+            if (msg.trim() == 'OK') success = true;
+          }
+        } catch(e) {}
+      }
+
+      if (success) {
         this_form.find('.loading').slideUp();
         this_form.find('.sent-message').slideDown();
         this_form.find("input:not(input[type=submit]), textarea").val('');
@@ -138,6 +162,14 @@
         this_form.find('.loading').slideUp();
         if(!msg) {
           msg = 'Form submission failed and no error message returned from: ' + action + '<br>';
+        }
+        // If msg is JSON with an error message, try to extract
+        if (!msg || typeof msg === 'object') {
+          try {
+            if (msg && msg.error) msg = msg.error;
+            else if (msg && msg.message) msg = msg.message;
+            else msg = 'Form submission failed.';
+          } catch(e) { msg = 'Form submission failed.'; }
         }
         this_form.find('.error-message').slideDown().html(msg);
       }
