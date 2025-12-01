@@ -3,25 +3,27 @@ const admin = require('firebase-admin');
 const express = require('express');
 const cors = require('cors');
 
-admin.initializeApp();
+// Initialize Firebase Admin
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
 const db = admin.firestore();
 
 const app = express();
-app.use(cors({ origin: true }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Enable CORS for all requests
+app.use(cors({ origin: '*' }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Optional SendGrid
-let sendgrid;
-if (process.env.SENDGRID_API_KEY) {
-  try {
-    sendgrid = require('@sendgrid/mail');
-    sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
-  } catch (e) {
-    console.warn('SendGrid not available or failed to init');
-  }
-}
+// Handle OPTIONS requests for CORS
+app.options('*', cors({ origin: '*' }));
 
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', service: 'submitContact' });
+});
+
+// Main contact form handler
 app.post('/', async (req, res) => {
   try {
     const { name, email, subject, message } = (req.body || {});
@@ -59,11 +61,28 @@ app.post('/', async (req, res) => {
       }
     }
 
-    return res.json({ success: true, id: ref.id });
+    return res.json({ success: true, message: 'Mensaje enviado correctamente', id: ref.id });
   } catch (err) {
-    console.error('submitContact error', err);
-    return res.status(500).json({ error: 'Error al procesar el formulario.' });
+    console.error('submitContact error:', err);
+    return res.status(500).json({ error: 'Error al procesar el formulario: ' + (err?.message || 'unknown error') });
   }
 });
+
+// Fallback: handle any other POST requests
+app.post('/*', async (req, res) => {
+  // redirect to root POST handler
+  res.status(405).json({ error: 'Endpoint not found. Use POST /' });
+});
+
+// Optional SendGrid (moved after routes)
+let sendgrid;
+if (process.env.SENDGRID_API_KEY) {
+  try {
+    sendgrid = require('@sendgrid/mail');
+    sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+  } catch (e) {
+    console.warn('SendGrid not available or failed to init');
+  }
+}
 
 exports.submitContact = functions.runWith({ memory: '256MB' }).https.onRequest(app);
