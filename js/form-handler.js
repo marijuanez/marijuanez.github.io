@@ -22,7 +22,7 @@
     if (form) {
       const endpoint = isLocalEnvironment() 
         ? 'forms/contact.php'  // Local MAMP
-        : '/api/contact';       // Producción Firebase
+        : 'https://us-central1-marijuanez.cloudfunctions.net/submitContact';  // Producción Firebase
       
       form.setAttribute('action', endpoint);
       
