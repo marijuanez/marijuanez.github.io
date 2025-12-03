@@ -23,8 +23,8 @@ app.get('/', (req, res) => {
   res.json({ status: 'ok', service: 'submitContact' });
 });
 
-// Unified contact handler for '/' and '/api/contact' (rewrite scenarios)
-async function contactHandler(req, res) {
+// Main contact form handler
+app.post('/', async (req, res) => {
   try {
     const { name, email, subject, message } = (req.body || {});
     // Basic server-side validation
@@ -44,7 +44,7 @@ async function contactHandler(req, res) {
       read_status: 0
     };
 
-    const ref = await db.collection('messages').add(doc);
+    const ref = await db.collection('formulario-portfolio-marijuanez').add(doc);
 
     // Optional: send notification email via SendGrid
     if (sendgrid) {
@@ -66,13 +66,36 @@ async function contactHandler(req, res) {
     console.error('submitContact error:', err);
     return res.status(500).json({ error: 'Error al procesar el formulario: ' + (err?.message || 'unknown error') });
   }
-}
+});
 
-// Accept both root and explicit path (in case rewrites preserve path)
-app.post('/', contactHandler);
-app.post('/api/contact', contactHandler);
-// Generic catch-all: treat as contact to be lenient, or return 404 if desired
-app.post('*', contactHandler);
+// Accept POST on any path (for flexibility with rewrites)
+app.post('/*', async (req, res) => {
+  // Redirect to the main handler logic
+  try {
+    const { name, email, subject, message } = (req.body || {});
+    if (!name || name.trim().length < 4) return res.status(400).json({ error: 'El nombre debe tener al menos 4 caracteres.' });
+    if (!email || !/^[^\s()<>@,;:\/]+@\w[\w\.-]+\.[a-z]{2,}$/i.test(email)) return res.status(400).json({ error: 'Email inválido.' });
+    if (!subject || subject.trim().length < 4) return res.status(400).json({ error: 'Asunto inválido.' });
+    if (!message || message.trim().length === 0) return res.status(400).json({ error: 'Mensaje vacío.' });
+
+    const doc = {
+      name: String(name).trim(),
+      email: String(email).trim(),
+      subject: String(subject).trim(),
+      message: String(message).trim(),
+      ip_address: req.headers['fastly-client-ip'] || req.ip || null,
+      user_agent: req.headers['user-agent'] || null,
+      created_at: admin.firestore.FieldValue.serverTimestamp(),
+      read_status: 0
+    };
+
+    const ref = await db.collection('formulario-portfolio-marijuanez').add(doc);
+    return res.json({ success: true, message: 'Mensaje enviado correctamente', id: ref.id });
+  } catch (err) {
+    console.error('submitContact error:', err);
+    return res.status(500).json({ error: 'Error al procesar el formulario: ' + (err?.message || 'unknown error') });
+  }
+});
 
 // Optional SendGrid (moved after routes)
 let sendgrid;

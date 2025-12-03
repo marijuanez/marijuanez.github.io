@@ -334,18 +334,19 @@ body {
 
 #wrapper h1 {
   margin: 0;
-  font-size: 60px;
-  font-weight: 500;
-  line-height: 56px;
-  color: #748696;
+  font-size: 57px;
+  font-weight: 600;
+  line-height: 63px;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
 }
 
 #wrapper h2 {
   margin: 0;
-  font-size: 44px;
-  font-weight: 400;
-  line-height: 56px;
-  color: #fff;
+  font-size: 78px;
+  font-weight: 300;
+  line-height: 84px;
+  color: #748696;
 }
 
 
@@ -401,21 +402,44 @@ body {
   color: #fff;
 }
 
+/* Botón de descarga de CV */
+.btn-download-cv {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #fff;
+  color: #45505b;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin: 20px 0;
+}
+
+.btn-download-cv:hover {
+  background: transparent;
+  color: #fff;
+  border-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
 @media (max-width: 1150px) {
   #wrapper {
     text-align: center;
   }
-  
 
-  }
   #wrapper h1 {
-    font-size: 32px;
-    line-height: 36px;
+    font-size: 31px;
+    line-height: 37px;
   }
-  }
+
   #wrapper h2 {
-    font-size: 24px;
-    line-height: 28px;
+    font-size: 42px;
+    line-height: 48px;
   }
 
   #wrapper p {
@@ -476,6 +500,8 @@ section {
 
 .section-title p {
   margin-bottom: 0;
+  font-size: 19px;
+  line-height: 1.6;
 }
 
 /*--------------------------------------------------------------
@@ -500,6 +526,11 @@ section {
   font-size: 20px;
   padding-right: 2px;
   color: #728394;
+}
+
+.about .content p {
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .about .content p:last-child {

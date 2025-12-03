@@ -109,25 +109,15 @@
     this_form.find('.error-message').slideUp();
     this_form.find('.loading').slideDown();
 
-    // Detect environment and adjust action URL
-    var finalAction = action;
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      // Local MAMP: use PHP backend
-      if (action === '/api/contact') {
-        finalAction = 'forms/contact.php';
-      }
-    }
-    // Production (Firebase): action stays as /api/contact (Cloud Function)
-
     if ( $(this).data('recaptcha-site-key') ) {
       var recaptcha_site_key = $(this).data('recaptcha-site-key');
       grecaptcha.ready(function() {
         grecaptcha.execute(recaptcha_site_key, {action: 'php_email_form_submit'}).then(function(token) {
-          php_email_form_submit(this_form,finalAction,this_form.serialize() + '&recaptcha-response=' + token);
+          php_email_form_submit(this_form,action,this_form.serialize() + '&recaptcha-response=' + token);
         });
       });
     } else {
-      php_email_form_submit(this_form,finalAction,this_form.serialize());
+      php_email_form_submit(this_form,action,this_form.serialize());
     }
     
     return true;
