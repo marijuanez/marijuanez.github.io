@@ -169,3 +169,5 @@ En GitHub → Settings → Secrets and variables → Actions, añadir:
 ---
 
 **Última actualización:** Diciembre 2025
+
+<!-- Deploy to oskar-marijuan.web.app -->
